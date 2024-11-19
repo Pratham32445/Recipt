@@ -24,7 +24,12 @@ const Recipt = () => {
     firstLanguage: "",
     secondLanguage: "",
   });
-  const [commits, setcommits] = useState({ count: 0, servedBy: "", time: "" , Id : 0});
+  const [commits, setcommits] = useState({
+    count: 0,
+    servedBy: "",
+    time: "",
+    Id: 0,
+  });
   const [blob, setBlob] = useState<Blob | null>(null);
   const { theme } = useTheme();
 
@@ -78,7 +83,7 @@ const Recipt = () => {
           setLanguages({ firstLanguage, secondLanguage });
           const time = new Date().toLocaleTimeString();
           const Id = randomId();
-          setcommits({ count: commitCount, servedBy, time , Id});
+          setcommits({ count: commitCount, servedBy, time, Id });
           setLoading(false);
         } catch (error) {}
       }
@@ -114,28 +119,22 @@ const Recipt = () => {
   };
 
   const shareImage = async () => {
-    try {
-      let file;
-      if (reciptRef.current) {
-        if (!blob) {
-          const canvas = await html2canvas(reciptRef.current);
-          const blob = await (await fetch(canvas.toDataURL())).blob();
-          file = new File([blob], `${User?.name}_receipt.png`, {
-            type: "image/png",
-          });
-          setBlob(blob);
-        }
+    let file;
+    if (reciptRef.current) {
+      if (!blob) {
+        const canvas = await html2canvas(reciptRef.current);
+        const blob = await (await fetch(canvas.toDataURL())).blob();
+        file = new File([blob], `${User?.name}_receipt.png`, {
+          type: "image/png",
+        });
+        setBlob(blob);
       }
-      await navigator.share({
-        title: "GitHub Receipt",
-        text: `GitHub Stats for ${User?.login}`,
-        files: [file!],
-      });
-    } catch (error) {
-      toast({
-        title: "Some error occured while sharing the file",
-      });
     }
+    await navigator.share({
+      title: "GitHub Receipt",
+      text: `GitHub Stats for ${User?.login}`,
+      files: [file!],
+    });
   };
 
   return (
@@ -143,7 +142,7 @@ const Recipt = () => {
       {User && !loading ? (
         <div
           ref={reciptRef}
-          className="sm:w-[280px] w-10/12 bg-[#FCFCFC] shadow-recipt"
+          className="sm:w-[250px] w-10/12 bg-[#FCFCFC] shadow-recipt"
         >
           <ReciptBar />
           <div className="py-6 px-4">
